@@ -83,6 +83,7 @@ public class Cliente{
     private int digitosVerificadoresCPF(long cpf){
         int j = 0; // Primeiro dígito
         int k = 0; // Segundo dígito
+        
         cpf -= cpf % 10;
         cpf -= cpf % 100;       
 

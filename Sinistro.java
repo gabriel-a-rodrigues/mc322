@@ -4,12 +4,18 @@ public class Sinistro {
     private int id;
     private String data;
     private String endereco;
+    private Seguradora seguradora;
+    private Veiculo veiculo;
+    private Cliente cliente;
     
     // Construtor
-    public Sinistro(String data, String endereco){
-        this.id = gerarId(data); // A data será usada como semente da função pseudoleatória.
+    public Sinistro(String data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente){
+        this.id = gerarId();
         this.data = data;
         this.endereco = endereco;
+        this.seguradora = seguradora;
+        this.veiculo = veiculo;
+        this.cliente = cliente;
     }
     
     // Getters e setters
@@ -36,12 +42,34 @@ public class Sinistro {
     public void setEndereco(String endereco){
         this.endereco = endereco;
     }
+    
+    public Seguradora getSeguradora(){
+        return seguradora;
+    }
+    
+    public void setSeguradora(Seguradora seguradora){
+        this.seguradora = seguradora;
+    }
+    
+    public Veiculo getVeiculo(){
+        return veiculo;
+    }
+    
+    public void setVeiculo(Veiculo veiculo){
+        this.veiculo = veiculo;
+    }
+    
+    public Cliente getCliente(){
+        return cliente;
+    }
+    
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
 
-    public int gerarId(String seedString){
-        /* Gera uma id pseudoaleatória. Recebe uma string que será convertida para 
-        long. */
-    	seedString = seedString.replaceAll("[^0-9]", "");
-        long seed = Long.valueOf(seedString).longValue();
+    public int gerarId(){
+        // Gera uma id pseudoaleatória.
+    	long seed = System.currentTimeMillis();
         return getRandom(seed);
     }
 
@@ -52,6 +80,6 @@ public class Sinistro {
     }
 
     public String toString(){
-        return ("Sinistro: ID: " + getId() + "; Data: " + getData() + "; Endereço: " + getEndereco());
+        return ("Sinistro: ID: " + getId() + "; Data: " + getData() + "; Endereço: " + getEndereco() + " " + seguradora.toString() + " " + veiculo.toString() + " " + cliente.toString());
     }
 }
