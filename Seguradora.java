@@ -68,8 +68,9 @@ public class Seguradora {
     }
     
     // Clientes:
-    public boolean cadastrarCliente(Cliente cliente){
-    	// Insere cliente em listaClientes.
+    public boolean cadastrarCliente(String nome, String endereco, List<Veiculo> listaVeiculos){
+    	// Cria cliente e insere em listaClientes.
+    	Cliente cliente = new Cliente(nome, endereco, listaVeiculos);
     	return listaClientes.add(cliente);
     }
     
@@ -81,7 +82,34 @@ public class Seguradora {
     	return false;
     }
     
-    // listarClientes()
+    public String listarClientes(){
+    	if (listaClientes.size() == 0)
+    		return "Não há clientes na lista.";
+    	
+    	String lista = "";
+    	
+    	for (int i = 0; i < listaClientes.size() - 1; i++)
+    		lista += listaClientes.get(i).getNome() + " - ";
+    	
+    	lista += listaClientes.get(listaClientes.size() - 1);
+    	
+    	return lista;
+    }
+    
+    public Cliente getCliente(String nome){
+    	if (getListaClientes().size() == 0)
+    		return null;
+    	
+    	List<Cliente> listaClientes = getListaClientes();
+    	
+    	for (int i = 0; i < listaClientes.size(); i++){
+    		if (listaClientes.get(i).getNome() == nome)
+    			return listaClientes.get(i);
+    	}
+    	
+    	return null;
+    }
+    
     
     // Sinistros:
     public boolean gerarSinistro(String data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente){
@@ -104,6 +132,6 @@ public class Seguradora {
     }
 
     public String toString(){
-        return ("Seguradora: Nome: " + getNome() + "; Telefone: " + getTelefone() + "; Email: " + getEmail() + "; Endereço: " + getEndereco());
+        return ("Seguradora: Nome: " + getNome() + " | Telefone: " + getTelefone() + " | Email: " + getEmail() + " | Endereço: " + getEndereco());
     }
 }

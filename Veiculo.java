@@ -46,6 +46,6 @@ public class Veiculo {
     }
 
     public String toString(){
-        return ("Veículo: Placa: " + getPlaca() + "; Marca: " + getMarca() + "; Modelo: " + getModelo());
+        return ("Veículo: Placa: " + getPlaca() + " | Marca: " + getMarca() + " | Modelo: " + getModelo());
     }
 }

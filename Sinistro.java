@@ -80,6 +80,6 @@ public class Sinistro {
     }
 
     public String toString(){
-        return ("Sinistro: ID: " + getId() + "; Data: " + getData() + "; Endereço: " + getEndereco() + " " + seguradora.toString() + " " + veiculo.toString() + " " + cliente.toString());
+        return ("Sinistro: ID: " + getId() + " | Data: " + getData() + " | Endereço: " + getEndereco() + " | Veículo: " + veiculo.toString() + " | Cliente: " + cliente.getNome());
     }
 }
