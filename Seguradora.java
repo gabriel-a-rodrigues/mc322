@@ -68,9 +68,8 @@ public class Seguradora {
     }
     
     // Clientes:
-    public boolean cadastrarCliente(String nome, String endereco, List<Veiculo> listaVeiculos){
-    	// Cria cliente e insere em listaClientes.
-    	Cliente cliente = new Cliente(nome, endereco, listaVeiculos);
+    public boolean cadastrarCliente(Cliente cliente){
+    	// Insere o cliente em listaClientes.    	
     	return listaClientes.add(cliente);
     }
     
@@ -82,16 +81,20 @@ public class Seguradora {
     	return false;
     }
     
-    public String listarClientes(){
+    public String listarClientes(String tipoCliente){
     	if (listaClientes.size() == 0)
     		return "Não há clientes na lista.";
     	
     	String lista = "";
     	
-    	for (int i = 0; i < listaClientes.size() - 1; i++)
-    		lista += listaClientes.get(i).getNome() + " - ";
+    	for (int i = 0; i < listaClientes.size(); i++)
+    		if (listaClientes.get(i).getClass() == ClientePF.class && tipoCliente == "PF")
+    			lista += listaClientes.get(i).getNome() + " - ";
+    		else if (listaClientes.get(i).getClass() == ClientePJ.class && tipoCliente == "PJ")
+    			lista += listaClientes.get(i).getNome() + " - ";
     	
-    	lista += listaClientes.get(listaClientes.size() - 1);
+    	if (lista == "")
+    		return "Não há clientes do tipo " + tipoCliente;
     	
     	return lista;
     }
@@ -109,7 +112,6 @@ public class Seguradora {
     	
     	return null;
     }
-    
     
     // Sinistros:
     public boolean gerarSinistro(String data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente){
@@ -131,6 +133,18 @@ public class Seguradora {
     	return clienteEncontrado;		    				
     }
 
+    public String listarSinistros(){
+    	if (listaSinistros.size() == 0)
+    		return null;
+    	
+    	String listaString = "";
+    	
+    	for (int i = 0; i < listaSinistros.size(); i++)
+    		listaString += listaSinistros.get(i).toString() + "\n";
+    	
+    	return listaString;
+    }
+    
     public String toString(){
         return ("Seguradora: Nome: " + getNome() + " | Telefone: " + getTelefone() + " | Email: " + getEmail() + " | Endereço: " + getEndereco());
     }

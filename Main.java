@@ -1,45 +1,72 @@
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Collections;
 
 /* To do
- * Corrigir cadastrarClientes()
+ * Por que lista.add() não está funcionando?
+ * Especificar o tipo de cliente em cadastrarCliente() e listarClientes()
  * Adicionar menu para poder escolher o veículo do sinistro em gerarSinistro()
+ * Consertar a interface toda: problemas com System.in
  * */
 
 public class Main {	
     public static void main(String[] args){
     	Seguradora seguradora = new Seguradora("Seguros SA", "080010101010", "seguros@seguros.com", "Avenida 1, 345", 
     			Collections.<Sinistro>emptyList(), Collections.<Cliente>emptyList());
-    	userInterface(seguradora);
     	
+    	// Cliente Maria:
+    	List<Veiculo> veiculosMaria = new ArrayList<Veiculo>();
+    	Veiculo kaMaria = new Veiculo("AAA1A111", "FORD", "KA", 2016);
+    	veiculosMaria.add(kaMaria);
     	
+    	SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    	String dataLicencaString = "12/11/2015";
+    	String dataNascimentoString = "04/03/1994";    	
+    	Date dataLicenca = new Date();
+    	Date dataNascimento = new Date();
     	
+    	try {
+    		dataLicenca = format.parse(dataLicencaString);
+        	dataNascimento = format.parse(dataNascimentoString);
+    	} catch (ParseException e){
+    		e.printStackTrace();
+    	}
+    	ClientePF maria = new ClientePF("Maria", "Rua A, 90", veiculosMaria, "111.111.111-09", "feminino", dataLicenca, 
+    			"superior", dataNascimento, "B");
+    	seguradora.cadastrarCliente(maria);
+    	maria.validarCPF(maria.getCPF());
     	
+    	// Cliente JBS:
+    	List<Veiculo> veiculosJBS = new ArrayList<Veiculo>();
+    	Veiculo jettaJBS = new Veiculo("AAA0A111", "VOLKSWAGEN", "JETTA", 2020);
+    	veiculosJBS.add(jettaJBS);
     	
+    	String dataFundacaoString = "05-05-1953";
+    	Date dataFundacao = new Date();
     	
+    	try {
+    		dataFundacao = format.parse(dataFundacaoString);
+    	} catch (ParseException e){
+    		e.printStackTrace();
+    	}
     	
+    	ClientePJ jbs = new ClientePJ("JBS", "Avenida Paulista 357", veiculosJBS, "12.234.456/678-09", dataFundacao);
+    	seguradora.cadastrarCliente(jbs);
+    	jbs.validarCNPJ(jbs.getCNPJ());
     	
-    	
-    	
-    	
-//    	Veiculo veiculo = new Veiculo("AAA1A111", "FORD", "KA", 2013);
-//    	List<Veiculo> listaVeiculos = new ArrayList<Veiculo>();
-//    	listaVeiculos.add(veiculo);
-//    	Cliente cliente = new Cliente("Maria", "Rua 2 numero 3", listaVeiculos);
-//    	
-//    	List<Sinistro> listaSinistros = new ArrayList<Sinistro>(); // Declaring these lists feels so wrong. Find a better way.
-//    	List<Cliente> listaClientes = new ArrayList<Cliente>();
-//    	Seguradora seguradora = new Seguradora("Porto", "1191919191", "porto@p.com.br", "Avenida 2 434", listaSinistros, listaClientes);
-//    	
-//    	
-//    	Sinistro sinistro = new Sinistro("12/03/2023", "ABC 123", seguradora, veiculo, cliente);
-//        
-//    	System.out.println(cliente.toString());
-//    	System.out.println(sinistro.toString());
-//    	System.out.println(veiculo.toString());
-//    	System.out.println(seguradora.toString());
+    	seguradora.gerarSinistro("17/04/2023", "Rua B 34", seguradora, jettaJBS, jbs);
+    	seguradora.toString();
+    	jbs.toString();
+    	maria.toString();
+    	seguradora.getListaSinistros().get(0).toString();
+    	kaMaria.toString();
+    	seguradora.listarClientes("PF");
+    	seguradora.visualizarSinistro("jbs");
+    	seguradora.listarSinistros();
     }
     
     public static void userInterface(Seguradora seguradora){
@@ -85,11 +112,13 @@ public class Main {
     		homeScreen(seguradora);
     		break;
     	case "5":
-    		visualizarSinistro();
+    		sucesso = visualizarSinistro(seguradora);
+    		mensagemVisualizarSinistro(sucesso);
     		homeScreen(seguradora);
     		break;
     	case "6":
-    		listarSinistros();
+    		sucesso = listarSinistros(seguradora);
+    		mensagemListarSinistros(sucesso);
     		homeScreen(seguradora);
     		break;
     	case "7":
@@ -97,6 +126,13 @@ public class Main {
     	default:
     		entradaHomeScreenInvalida(entrada, seguradora);
     	}
+    	
+    	scanner.close();
+    }
+    
+    public static void entradaHomeScreenInvalida(String entrada, Seguradora seguradora){
+    	System.out.println(entrada + " não corresponde a nenhuma opção.");
+    	homeScreen(seguradora);
     }
     
     public static boolean cadastrarCliente(Seguradora seguradora){
@@ -140,31 +176,31 @@ public class Main {
     		listaVeiculos.add(veiculo);
     	}
     	
-    	return seguradora.cadastrarCliente(nome, endereco, listaVeiculos);
+    	scanner.close();
+    	Cliente cliente = new Cliente(nome, endereco, listaVeiculos);
+    	return seguradora.cadastrarCliente(cliente);
     }
     
-    
     public static void mensagemCadastrarCliente(boolean sucesso){
-    	if (cadsucessoastro)
+    	if (sucesso)
     		System.out.println("Cliente cadastrado com sucesso!");
     	else
     		System.out.println("Cliente não pôde ser cadastrado.");
     }
     
-    
     public static boolean removerCliente(Seguradora seguradora){
     	if (seguradora.getListaClientes().size() == 0){
     		System.out.println("Nenhum cliente cadastrado.");
-    		return;
+    		return false;
     	}
     	
     	System.out.println("Nome do cliente: ");
     	Scanner scanner = new Scanner(System.in);
         String nome = scanner.nextLine();
+        scanner.close();        
         
         return seguradora.removerCliente(nome);
     }
-    
     
     public static void mensagemRemoverCliente(boolean sucesso){
     	if (sucesso)
@@ -173,9 +209,9 @@ public class Main {
     		System.out.println("Cliente removido com sucesso!");
     }
     
-    
     public static void listarClientes(Seguradora seguradora){
-    	System.out.println(seguradora.listarClientes());
+    	System.out.println(seguradora.listarClientes("PF"));
+    	System.out.println(seguradora.listarClientes("PJ"));
     }
     
     public static boolean gerarSinistro(Seguradora seguradora){
@@ -192,6 +228,7 @@ public class Main {
     	System.out.println("Nome do cliente: ");
     	nome = scanner.nextLine();
     	Cliente cliente = seguradora.getCliente(nome);
+    	scanner.close();
     	
     	if (cliente == null){
     		boolean cadastro = cadastrarCliente(seguradora);
@@ -214,17 +251,31 @@ public class Main {
     		System.out.println("Sinistro não pôde ser gerado.");    		
     }
     
-    public static void visualizarSinistro(){
-    	System.out.println("VISUALIZAR SINISTRO");
+    public static boolean visualizarSinistro(Seguradora seguradora){
+    	Scanner scanner = new Scanner(System.in);
+    	System.out.println("Nome do cliente:");
+    	String nome = scanner.nextLine();
+    	scanner.close();
+    	return seguradora.visualizarSinistro(nome);
     }
     
-    
-    public static void listarSinistros(){
-    	System.out.println("LISTAR SINISTROS");
+    public static void mensagemVisualizarSinistro(boolean sucesso){
+    	if (!sucesso)
+    		System.out.println("O cliente não existe ou não tem sinistros.");
     }
     
-    public static void entradaHomeScreenInvalida(String entrada, Seguradora seguradora){
-    	System.out.println(entrada + " não corresponde a nenhuma opção.");
-    	homeScreen(seguradora);
+    public static boolean listarSinistros(Seguradora seguradora){
+    	String listaString = seguradora.listarSinistros();
+    	
+    	if (listaString == null)
+    		return false;
+    	else
+    		System.out.println(listaString);
+    	return true;
+    }
+    
+    public static void mensagemListarSinistros(boolean sucesso){
+    	if (!sucesso)
+    		System.out.println("Nenhum sinistro cadastrado.");
     }
 }

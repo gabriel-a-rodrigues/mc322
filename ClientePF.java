@@ -80,9 +80,8 @@ public ClientePF(String nome, String endereco, List<Veiculo> listaVeiculos, Stri
 	}
 	
 	// CPF
-    public boolean validarCPF(){
+    public boolean validarCPF(String cpf){
         // Remover caracteres não numéricos:
-    	String cpf = getCPF();
         cpf = cpf.replaceAll("[^0-9]", "");
 
         // Verificar se o CPF possui 11 dígitos:

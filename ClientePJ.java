@@ -38,9 +38,7 @@ public class ClientePJ extends Cliente{
 	}
 	
 	// CNPJ
-    public boolean validarCNPJ(){
-    	String cnpj = getCNPJ();
-    	
+    public boolean validarCNPJ(String cnpj){    	
         // Remover caracteres não numéricos:
         cnpj = cnpj.replaceAll("[^0-9]", "");
 

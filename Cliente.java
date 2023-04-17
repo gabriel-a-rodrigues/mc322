@@ -1,9 +1,5 @@
 import java.util.List;
 
-/* To do
- * Adicionar listaVeiculos a toString
- * */
-
 public class Cliente{
     private String nome;
     private String endereco;
