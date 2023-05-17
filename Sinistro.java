@@ -1,21 +1,28 @@
 import java.util.Random;
+import java.time.LocalDate;
 
 public class Sinistro {
     private int id;
-    private String data;
+    private LocalDate data;
     private String endereco;
     private Seguradora seguradora;
     private Veiculo veiculo;
     private Cliente cliente;
     
     // Construtor
-    public Sinistro(String data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente){
+    public Sinistro(LocalDate data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente){
         this.id = gerarId();
         this.data = data;
         this.endereco = endereco;
         this.seguradora = seguradora;
         this.veiculo = veiculo;
         this.cliente = cliente;
+    }
+    
+    public Sinistro(LocalDate data, String endereco){
+        this.id = gerarId();
+        this.data = data;
+        this.endereco = endereco;
     }
     
     // Getters e setters
@@ -27,11 +34,11 @@ public class Sinistro {
         this.id = id;
     }
     
-    public String getData(){
+    public LocalDate getData(){
         return data;
     }
     
-    public void setData(String data){
+    public void setData(LocalDate data){
         this.data = data;
     }
     
@@ -69,17 +76,12 @@ public class Sinistro {
 
     public int gerarId(){
         // Gera uma id pseudoaleatória.
-    	long seed = System.currentTimeMillis();
-        return getRandom(seed);
+    	Random random = new Random();
+        return Math.abs(random.nextInt());
     }
-
-    private int getRandom(long seed){
-        Random random = new Random();
-        random.setSeed(seed);
-        return random.nextInt();
-    }
-
+    
+    @Override
     public String toString(){
-        return ("Sinistro: ID: " + getId() + " | Data: " + getData() + " | Endereço: " + getEndereco() + " | Veículo: " + veiculo.toString() + " | Cliente: " + cliente.getNome());
+        return ("ID " + getId() + " - " + getData() + " - " + getEndereco() + " - " + getVeiculo() + " - " + getCliente());
     }
 }

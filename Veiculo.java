@@ -12,6 +12,13 @@ public class Veiculo {
         this.anoFabricacao = anoFabricacao;
     }
     
+    public Veiculo() {
+    	this.placa = "";
+    	this.marca = "";
+    	this.modelo = "";
+    	this.anoFabricacao = 1;
+    }
+    
     // Getters e setters
     public String getPlaca(){
         return placa;
@@ -46,6 +53,6 @@ public class Veiculo {
     }
 
     public String toString(){
-        return ("Veículo: Placa: " + getPlaca() + " | Marca: " + getMarca() + " | Modelo: " + getModelo());
+        return (getMarca() + " " + getModelo() + " " + getAnoFabricacao() + " -- " + getPlaca());
     }
 }

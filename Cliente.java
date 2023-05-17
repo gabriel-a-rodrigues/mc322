@@ -1,15 +1,32 @@
 import java.util.List;
+import java.util.ArrayList;
 
 public class Cliente{
     private String nome;
     private String endereco;
-    private List<Veiculo> listaVeiculos;
+    private ArrayList<Veiculo> listaVeiculos;
+    private double valorSeguro;
 
     // Construtor
-    public Cliente(String nome, String endereco, List<Veiculo> listaVeiculos){
+    public Cliente(String nome, String endereco, ArrayList<Veiculo> listaVeiculos){
         this.nome = nome;
         this.endereco = endereco;
         this.listaVeiculos = listaVeiculos;
+        this.valorSeguro = 0.0;
+    }
+    
+    public Cliente(String nome, String endereco){
+        this.nome = nome;
+        this.endereco = endereco;
+        this.listaVeiculos = new ArrayList<Veiculo>();
+        this.valorSeguro = 0.0;
+    }
+    
+    public Cliente() {
+    	this.nome = "";
+    	this.endereco = "";
+    	this.listaVeiculos = new ArrayList<Veiculo>();
+    	this.valorSeguro = 0.0;
     }
     
     // Getters e setters
@@ -29,12 +46,20 @@ public class Cliente{
         this.endereco = endereco;
     }
     
-    public List<Veiculo> getListaVeiculos(){
+    public ArrayList<Veiculo> getListaVeiculos(){
     	return listaVeiculos;
     }
     
-    public void setListaVeiculos(List<Veiculo> listaVeiculos){
+    public void setListaVeiculos(ArrayList<Veiculo> listaVeiculos){
     	this.listaVeiculos = listaVeiculos;
+    }
+    
+    public double getValorSeguro(){
+    	return valorSeguro;
+    }
+    
+    public void setValorSeguro(double valorSeguro){
+    	this.valorSeguro = valorSeguro;
     }
     
     // Veículos
@@ -53,7 +78,23 @@ public class Cliente{
     	return listaVeiculosString;
     }
     
+    public boolean adicionarVeiculo(Veiculo veiculo) {
+    	return listaVeiculos.add(veiculo);
+    }
+    
+    public boolean removerVeiculo(String placa) {
+    	for (Veiculo v : listaVeiculos)
+    		if (v.getPlaca().equals(placa))
+    			return listaVeiculos.remove(v);
+    	return false;
+    	
+    }
+    
+    double calcularScore(){
+    	return 1.0;
+    }
+    
     public String toString(){
-    	return ("Cliente: Nome: " + getNome() + " | Endereço: " + getEndereco() + " | Veículos: \n" + listarVeiculos()); // Lista veículos
+    	return (getNome() + " - " + getEndereco() + " - " + listarVeiculos());
     }
 }

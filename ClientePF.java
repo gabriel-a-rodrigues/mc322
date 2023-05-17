@@ -1,5 +1,6 @@
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.time.Period;
 
 /* To do
  * Atualizar toString()
@@ -8,13 +9,23 @@ import java.util.List;
 public class ClientePF extends Cliente{
 	private String cpf;
 	private String genero;
-	private Date dataLicenca;
+	private LocalDate dataLicenca;
 	private String educacao;
-	private Date dataNascimento;
+	private LocalDate dataNascimento;
 	private String classeEconomica;
 	
-public ClientePF(String nome, String endereco, List<Veiculo> listaVeiculos, String cpf, String genero, Date dataLicenca, String educacao, Date dataNascimento, String classeEconomica){
+	public ClientePF(String nome, String endereco, ArrayList<Veiculo> listaVeiculos, String cpf, String genero, LocalDate dataLicenca, String educacao, LocalDate dataNascimento, String classeEconomica){
 		super(nome, endereco, listaVeiculos);
+		this.cpf = cpf;
+		this.genero = genero;
+		this.dataLicenca = dataLicenca;
+		this.educacao = educacao;
+		this.dataNascimento = dataNascimento;
+		this.classeEconomica = classeEconomica;
+	}
+	
+	public ClientePF(String nome, String endereco, String cpf, String genero, LocalDate dataLicenca, String educacao, LocalDate dataNascimento, String classeEconomica){
+		super(nome, endereco);
 		this.cpf = cpf;
 		this.genero = genero;
 		this.dataLicenca = dataLicenca;
@@ -40,11 +51,11 @@ public ClientePF(String nome, String endereco, List<Veiculo> listaVeiculos, Stri
         this.genero = genero;
     }
     
-    public Date getDataLicenca(){
+    public LocalDate getDataLicenca(){
         return dataLicenca;
     }
     
-    public void setDataLicenca(Date dataLicenca){
+    public void setDataLicenca(LocalDate dataLicenca){
         this.dataLicenca = dataLicenca;
     }
     
@@ -56,11 +67,11 @@ public ClientePF(String nome, String endereco, List<Veiculo> listaVeiculos, Stri
         this.educacao = educacao;
     }
     
-    public Date getDataNascimento(){
+    public LocalDate getDataNascimento(){
         return dataNascimento;
     }
     
-    public void setDataNascimento(Date dataNascimento){
+    public void setDataNascimento(LocalDate dataNascimento){
         this.dataNascimento = dataNascimento;
     }
     
@@ -71,64 +82,27 @@ public ClientePF(String nome, String endereco, List<Veiculo> listaVeiculos, Stri
     public void setClasseEconomica(String classeEconomica){
         this.classeEconomica = classeEconomica;
     }
+    
+    public double calcularScore() {
+    	int idade = idade();
+    	int quantidadeCarros = getListaVeiculos().toArray().length;
+    	
+    	if (idade < 30)
+    		return CalcSeguro.VALOR_BASE.valor() * CalcSeguro.FATOR_18_30.valor() * quantidadeCarros;
+    	else if (idade < 60)
+    		return CalcSeguro.VALOR_BASE.valor() * CalcSeguro.FATOR_30_60.valor() * quantidadeCarros;
+    	return CalcSeguro.VALOR_BASE.valor() * CalcSeguro.FATOR_60_90.valor() * quantidadeCarros;    		
+    }
+    
+    private int idade() {
+    	LocalDate currentDate = LocalDate.now();
+    	Period period = Period.between(dataNascimento, currentDate);
+    	return period.getYears();
+    }
  
 	@Override
 	public String toString(){
-		return ("ClientePF: Nome: " + getNome() + "| Endereço: " + getEndereco() + "| CPF: " + getCPF() + 
-				"| Gênero: " + getGenero() + "| Data da licença: " + getDataLicenca() + "| Educação: " + getEducacao() + 
-				"| Data de nascimento: " + getDataNascimento() + "| Classe econômica: " + getClasseEconomica());
+		return (getNome() + " - " + getDataNascimento() + " - Gênero " + getGenero() + " - CPF " + getCPF()+ " - " + getEndereco() + 
+				" - Liçenca " + getDataLicenca() + " - Educação " + getEducacao() + " - Classe " + getClasseEconomica());
 	}
-	
-	// CPF
-    public boolean validarCPF(String cpf){
-        // Remover caracteres não numéricos:
-        cpf = cpf.replaceAll("[^0-9]", "");
-
-        // Verificar se o CPF possui 11 dígitos:
-        if (cpf.length()!= 11)
-            return false;
-
-        long cpfLong = Long.valueOf(cpf).longValue();
-
-        // Verificar se todos os 11 digítos são iguais:
-        if (cpfLong % 11111111111L == 0)
-            return false;
-        
-        // Dígitos verificadores:
-        int digitosVerificadores = digitosVerificadoresCPF(cpfLong);
-        
-        if ((int)(cpfLong % 100L) != digitosVerificadores)
-            return false;
-
-        return true;
-    }
-
-    private int digitosVerificadoresCPF(long cpf){
-        int j = 0; // Primeiro dígito
-        int k = 0; // Segundo dígito
-        
-        cpf -= cpf % 10;
-        cpf -= cpf % 100;       
-
-        for (long l = 10000000000L, multiplicador = 11L; l >= 100L; l /= 10L, multiplicador -= 1L){
-            long i = (cpf - (cpf % l)) / l;
-            j += (int)((multiplicador - 1) * i);
-            k += (int)(multiplicador * i);
-            cpf -= l * i;
-        }
-        
-        k += 2 * j;
-        
-        if (j % 11 < 2)
-            j = 0;
-        else
-            j = 11 - j % 11;
-
-        if (k % 11 < 2)
-            k = 0;
-        else
-            k = 11 - k % 11;
-
-        return j * 10 + k;
-    }
 }
