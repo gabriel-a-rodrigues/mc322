@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public enum MenuOperacoes {
     HOME("\n1 - Cadastros\n2 - Listar\n3 - Excluir\n4 - Gerar sinistro\n5 - Transferir seguro\n6 - Calcular receita da seguradora\n0 - Sair\n"),
 
-    CADASTRAR("\n1 - Cadastrar cliente PF\n2 - Cadastrar cliente PJ\n3 - Cadastrar veículo\n4 - Cadastrar seguradora\n5- Voltar"),
+    CADASTRAR("\n1 - Cadastrar cliente PF\n2 - Cadastrar cliente PJ\n3 - Cadastrar veículo\n4 - Cadastrar seguradora\n5- Cadastrar seguro\n6- Voltar"),
 
     LISTAR("\n1 - Listar clientes\n2 - Listar sinistros por seguradora\n3 - Listar sinistros por cliente\n4 - Listar veículos por cliente\n5 - Listar veículos por seguradora\n6 - Voltar\n"),
 
@@ -62,7 +62,9 @@ public enum MenuOperacoes {
                     case 4: // Seguradora
                         Main.Menu.cadastrarSeguradora(scanner);
                         return HOME;
-                    case 5: // Voltar
+                    case 5: // Seguro
+                    	Main.Menu.cadastrarSeguro(scanner);
+                    case 6: // Voltar
                         return HOME;
                     default:
                     	System.out.println("Opção " + input + " inválida.");
