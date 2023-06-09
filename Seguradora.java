@@ -11,7 +11,7 @@ public class Seguradora {
     private ArrayList<Cliente> listaClientes;
     private ArrayList<Seguro> listaSeguros;
     
-    // Construtor
+    // Construtores
     public Seguradora(String cnpj, String nome, String telefone, String email, String endereco, ArrayList<Cliente> listaClientes, 
     		ArrayList<Seguro> listaSeguros){
         this.cnpj = cnpj;
@@ -76,14 +76,6 @@ public class Seguradora {
         this.endereco = endereco;
     }
     
-//    public ArrayList<Sinistro> getListaSinistros(){
-//    	return listaSinistros;
-//    }
-//    
-//    public void setListaSinistros(ArrayList<Sinistro> listaSinistros){
-//    	this.listaSinistros = listaSinistros;
-//    }
-    
     public ArrayList<Cliente> getListaClientes(){
     	return listaClientes;
     }
@@ -116,16 +108,6 @@ public class Seguradora {
     	return listaClientes.add(cliente);
     }
     
-//    public boolean removerCliente(String nomeCliente){
-//    	// Remove o cliente de listaClientes. Retorna true se o cliente não estiver na lista.
-//    	boolean removido = true;
-//    	
-//    	for (Cliente cliente : getListaClientes())
-//    		if (c.getNome().equals(nomeCliente))
-//    			return listaClientes.remove(c);
-//    	return removido;
-//    }
-    
     public boolean removerCliente(String cpfOuCNPJ){
     	// Remove o cliente de listaClientes. Retorna true se o cliente não estiver na lista.
     	if (!Validacao.validarCNPJ(cpfOuCNPJ) && Validacao.validarCPF(cpfOuCNPJ)) // CPF ou CNPJ inválido.
@@ -148,20 +130,23 @@ public class Seguradora {
     	return removido;
     }
     
-    public String listarClientes(String tipoCliente){
-    	if (listaClientes.size() == 0)
-    		return "Não há clientes na lista.";
-    	
+    public boolean removerCliente(Cliente cliente){
+    	// Remove o cliente de listaClientes. Retorna true se o cliente não estiver na lista.
+    	if (cliente instanceof ClientePF)
+    		return removerCliente(((ClientePF)cliente).getCPF());
+    	else if (cliente instanceof ClientePJ)
+    		return removerCliente(((ClientePJ)cliente).getCNPJ());
+    	return false;
+    }
+    
+    public String listarClientes(){
     	String lista = "";
     	
-    	for (int i = 0; i < listaClientes.size(); i++)
-    		if (listaClientes.get(i) instanceof ClientePF && tipoCliente.equals("f"))
-    			lista += listaClientes.get(i) + " - ";
-    		else if (listaClientes.get(i) instanceof ClientePJ && tipoCliente.equals("j"))
-    			lista += listaClientes.get(i) + " - ";
+    	for (Cliente cliente : getListaClientes())
+    		lista += cliente + "\n";    	
     	
     	if (lista.equals(""))
-    		return "Não há clientes do tipo " + tipoCliente;
+    		return "A seguradora ainda não tem clientes cadastrados.";
     	
     	return lista;
     }
@@ -177,6 +162,16 @@ public class Seguradora {
     }
     
     // Seguros:
+    // Gerar seguro PF sem sinistros:
+    public boolean gerarSeguro(LocalDate dataInicio, LocalDate dataFim, ArrayList<Condutor> listaCondutores, 
+    		Veiculo veiculo, ClientePF cliente) {
+    	// Cria um SeguroPF e adiciona à lista.
+    	ArrayList<Sinistro> listaSinistros = new ArrayList<Sinistro>();
+    	Seguro seguro = new SeguroPF(dataInicio, dataFim, this, listaSinistros, listaCondutores, veiculo, cliente);
+    	return getListaSeguros().add(seguro);
+    }
+    
+    // Gerar seguro PF com sinistros:
     public boolean gerarSeguro(LocalDate dataInicio, LocalDate dataFim, ArrayList<Sinistro> listaSinistros, 
 			ArrayList<Condutor> listaCondutores, Veiculo veiculo, ClientePF cliente) {
     	// Cria um SeguroPF e adiciona à lista.
@@ -184,6 +179,16 @@ public class Seguradora {
     	return getListaSeguros().add(seguro);
     }
     
+    // Gerar seguro PJ sem sinistros:
+    public boolean gerarSeguro(LocalDate dataInicio, LocalDate dataFim, ArrayList<Condutor> listaCondutores, 
+    		Frota frota, ClientePJ cliente) {
+    	// Cria um SeguroPJ e adiciona à lista.
+    	ArrayList<Sinistro> listaSinistros = new ArrayList<Sinistro>();
+    	Seguro seguro = new SeguroPJ(dataInicio, dataFim, this, listaSinistros, listaCondutores, frota, cliente);
+    	return getListaSeguros().add(seguro);
+    }
+    
+    // Gerar seguro PJ com sinistros:
     public boolean gerarSeguro(LocalDate dataInicio, LocalDate dataFim, ArrayList<Sinistro> listaSinistros, 
 			ArrayList<Condutor> listaCondutores, Frota frota, ClientePJ cliente) {
     	// Cria um SeguroPJ e adiciona à lista.
@@ -207,36 +212,6 @@ public class Seguradora {
     	return null;
     }
     
-
-//    
-//    public boolean visualizarSinistro(String cliente){
-//    	// Imprime todos os sinistros com o nome especificado do cliente. Retorna false se não houver nenhum sinistro.
-//    	boolean clienteEncontrado = false;
-//    	
-//    	for (int i = 0; i < listaSinistros.size(); i++)
-//    		if (listaSinistros.get(i).getCliente().getNome().equals(cliente)){
-//    			System.out.println(listaSinistros.get(i));
-//    			clienteEncontrado = true;
-//    		}
-//    	
-//    	if (!clienteEncontrado)
-//    		System.out.println("Cliente " + cliente + " não tem nenhum sinistro registrado.");
-//    	
-//    	return clienteEncontrado;		    				
-//    }
-//
-//    public String listarSinistros(){
-//    	if (listaSinistros.size() == 0)
-//    		return null;
-//    	
-//    	String listaString = "";
-//    	
-//    	for (int i = 0; i < listaSinistros.size(); i++)
-//    		listaString += listaSinistros.get(i) + "\n";
-//    	
-//    	return listaString;
-//    }
-//    
     public boolean removerSinistro(Sinistro sinistro) {
     	// Remove o sinistro do seguro em que está cadastrado. Retorna false se não encontrar o sinistro em nenhum seguro.
     	for (Seguro seguro : getListaSeguros())
@@ -245,53 +220,38 @@ public class Seguradora {
     				return seguro.getListaSinistros().remove(sinistro);
     	return false;
     }
-//    
-//    public double calcularPrecoSeguroCliente(Cliente cliente){    	
-//    	return cliente.calcularScore() * (1 + contarSinistros(cliente, listaSinistros));
-//    }
-//    
-//    private static int contarSinistros(Cliente cliente, ArrayList<Sinistro> listaSinistros) {
-//    	int count = 0;
-//    	
-//    	for (Sinistro sinistro : listaSinistros)
-//    		if (sinistro.getCliente() == cliente)
-//    			count++;
-//    	
-//    	return count;
-//    }
 
     public double calcularReceita() {
     	int receita = 0;
     	String valores = "";
     	
-    	for (Seguro s : getListaSeguros()) {
-    		valores += (s.getValorMensal() + " + ");
-    		receita += s.getValorMensal();
+    	for (Seguro seguro : getListaSeguros()) {
+    		valores += (seguro.getValorMensal() + " + ");
+    		receita += seguro.getValorMensal();
     	}
     	
-    	valores = valores.substring(0, valores.length() - 3); // Remover o último " + "
-    	valores += " = ";
-    	System.out.println(valores);
+    	if (valores.length() >= 3) {
+    		valores = valores.substring(0, valores.length() - 3); // Remover o último " + "
+        	valores += " = ";
+    	}
+
     	return receita;
     }
     
-    public ArrayList<Seguro> getSegurosPorCliente(String cpfOuCNPJ){
+    public ArrayList<Seguro> getSegurosPorCliente(Cliente cliente){
     	// Retorna uma lista de seguros associados ao cliente especificado. Retorna uma lista vazia se o CPF ou CNPJ for inválido.
     	ArrayList<Seguro> segurosCliente = new ArrayList<Seguro>();
-    	
-    	if (!Validacao.validarCPF(cpfOuCNPJ) && !Validacao.validarCNPJ(cpfOuCNPJ))
-    		return segurosCliente;
-    	
+
     	for (Seguro seguro : getListaSeguros()) {
     		if (seguro instanceof SeguroPF) {
     			SeguroPF seguroPF = (SeguroPF)seguro;
     			
-    			if (seguroPF.getCliente().getCPF().equals(cpfOuCNPJ))
+    			if (seguroPF.getCliente().equals(cliente))
     				segurosCliente.add(seguroPF);    				
     		} else if (seguro instanceof SeguroPJ) {
     			SeguroPJ seguroPJ = (SeguroPJ)seguro;
     			
-    			if (seguroPJ.getCliente().getCNPJ().equals(cpfOuCNPJ))
+    			if (seguroPJ.getCliente().equals(cliente))
     				segurosCliente.add(seguroPJ);
     		}
     	}
@@ -314,6 +274,6 @@ public class Seguradora {
     }
     
     public String toString(){
-        return (getNome() + " - " + getTelefone() + " - " + getEmail() + " - " + getEndereco());
+        return (getNome() + " - " + getTelefone() + " - " + getEmail() + " - " + getEndereco() + " - Receita " + calcularReceita());
     }
 }

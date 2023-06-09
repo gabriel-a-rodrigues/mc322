@@ -10,7 +10,7 @@ public class SeguroPF extends Seguro {
 		super(dataInicio, dataFim, seguradora, listaSinistros, listaCondutores);
 		this.veiculo = veiculo;
 		this.cliente = cliente;
-		this.setValorMensal(calcularValor());
+		this.setValorMensal(calcularValor(cliente));
 	}
 	
 	public SeguroPF() {
@@ -36,9 +36,7 @@ public class SeguroPF extends Seguro {
 		this.cliente = cliente;
 	}
 	
-//	public boolean gerarSinistro()
-	
-	public int calcularValor() {
+	public int calcularValor(ClientePF cliente) {
 		double fatorIdade = 0;
 		int idade = cliente.idade();
 		int quantidadeVeiculos = cliente.getListaVeiculos().size();	

@@ -53,6 +53,6 @@ public class Veiculo {
     }
 
     public String toString(){
-        return (getMarca() + " " + getModelo() + " " + getAnoFabricacao() + " -- " + getPlaca());
+        return (getMarca() + " " + getModelo() + " " + getAnoFabricacao() + " - Placa " + getPlaca());
     }
 }

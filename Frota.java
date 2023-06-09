@@ -42,6 +42,7 @@ public class Frota {
 		for (Veiculo v : getListaVeiculos())
 			if (v.getPlaca().equals(veiculo.getPlaca()))
 				return true;
+		// Adicionar:
 		return getListaVeiculos().add(veiculo);
 	}
 	
@@ -68,15 +69,15 @@ public class Frota {
 		String lista = "";
 		
 		for (Veiculo v : getListaVeiculos())
-			lista += v + " - ";
+			lista += v + " | ";
 		
-		// Tirar o último " - "
-		lista = lista.substring(0, lista.length() - 3);
+		if (lista.length() > 2)
+			lista = lista.substring(0, lista.length() - 3); // Tirar o último " | "
 		
 		return lista;
 	}
 	
 	public String toString() {
-		return (getCode() + " - " + listaVeiculosString());
+		return ("Frota " + getCode() + " - " + listaVeiculosString());
 	}
 }

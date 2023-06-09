@@ -14,9 +14,17 @@ public class ClientePJ extends Cliente{
 	
 	public ClientePJ(String nome, String telefone, String endereco, String email, String cnpj, LocalDate dataFundacao, ArrayList<Frota> listaFrotas, int qtdeFuncionarios){
 		super(nome, telefone, endereco, email);
-		this.cnpj = cnpj;
+		this.cnpj = cnpj.replaceAll("[^0-9]", "");;
 		this.dataFundacao = dataFundacao;
 		this.listaFrotas = listaFrotas;
+		this.qtdeFuncionarios = qtdeFuncionarios;
+	}
+	
+	public ClientePJ(String nome, String telefone, String endereco, String email, String cnpj, LocalDate dataFundacao, int qtdeFuncionarios){
+		super(nome, telefone, endereco, email);
+		this.cnpj = cnpj.replaceAll("[^0-9]", "");;
+		this.dataFundacao = dataFundacao;
+		this.listaFrotas = new ArrayList<Frota>();
 		this.qtdeFuncionarios = qtdeFuncionarios;
 	}
 	

@@ -6,22 +6,28 @@ import java.time.format.DateTimeFormatter;
 public class ClientePF extends Cliente{
 	private String cpf;
 	private String genero;
-//	private LocalDate dataLicenca;
 	private String educacao;
 	private LocalDate dataNascimento;
 	private ArrayList<Veiculo> listaVeiculos;
-//	private String classeEconomica;
 	
 	public ClientePF(String nome, String telefone, String endereco, String email, String cpf, 
 			String genero, String educacao, LocalDate dataNascimento, ArrayList<Veiculo> listaVeiculos){
 		super(nome, telefone, endereco, email);
-		this.cpf = cpf;
+		this.cpf = cpf.replaceAll("[^0-9]", "");;
 		this.genero = genero;
-//		this.dataLicenca = dataLicenca;
 		this.educacao = educacao;
 		this.dataNascimento = dataNascimento;
 		this.listaVeiculos = listaVeiculos;
-//		this.classeEconomica = classeEconomica;
+	}
+	
+	public ClientePF(String nome, String telefone, String endereco, String email, String cpf, 
+			String genero, String educacao, LocalDate dataNascimento){
+		super(nome, telefone, endereco, email);
+		this.cpf = cpf.replaceAll("[^0-9]", "");;
+		this.genero = genero;
+		this.educacao = educacao;
+		this.dataNascimento = dataNascimento;
+		this.listaVeiculos = new ArrayList<Veiculo>();
 	}
 	
 	public ClientePF() {
@@ -50,14 +56,6 @@ public class ClientePF extends Cliente{
         this.genero = genero;
     }
     
-//    public LocalDate getDataLicenca(){
-//        return dataLicenca;
-//    }
-//    
-//    public void setDataLicenca(LocalDate dataLicenca){
-//        this.dataLicenca = dataLicenca;
-//    }
-    
     public String getEducacao(){
         return educacao;
     }
@@ -73,14 +71,6 @@ public class ClientePF extends Cliente{
     public void setDataNascimento(LocalDate dataNascimento){
         this.dataNascimento = dataNascimento;
     }
-    
-//    public String getClasseEconomica(){
-//        return classeEconomica;
-//    }
-//    
-//    public void setClasseEconomica(String classeEconomica){
-//        this.classeEconomica = classeEconomica;
-//    }
     
     public ArrayList<Veiculo> getListaVeiculos() {
 		return listaVeiculos;
@@ -153,17 +143,6 @@ public class ClientePF extends Cliente{
     	
     	return listaVeiculosString;
     }
-
-//	public double calcularScore() {
-//    	int idade = idade();
-//    	int quantidadeCarros = getListaVeiculos().toArray().length;
-//    	
-//    	if (idade < 30)
-//    		return CalcSeguro.VALOR_BASE.valor() * CalcSeguro.FATOR_18_30.valor() * quantidadeCarros;
-//    	else if (idade < 60)
-//    		return CalcSeguro.VALOR_BASE.valor() * CalcSeguro.FATOR_30_60.valor() * quantidadeCarros;
-//    	return CalcSeguro.VALOR_BASE.valor() * CalcSeguro.FATOR_60_.valor() * quantidadeCarros;    		
-//    }
     
     public int idade() {
     	// Retorna a idade do cliente.
@@ -175,6 +154,6 @@ public class ClientePF extends Cliente{
 	@Override
 	public String toString(){
 		return (getNome() + " - " + getDataNascimento() + " - Gênero " + getGenero() + " - CPF " + getCPF()+ " - " + getEndereco() + 
-				" - " + getTelefone() + " - " + getEmail() + " - Educação " + getEducacao());
+				" - " + getTelefone() + " - " + getEmail() + " - " + getEducacao());
 	}
 }

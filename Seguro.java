@@ -23,19 +23,9 @@ public abstract class Seguro {
 		this.valorMensal = calcularValor();
 	}
 	
-	public Seguro() {
-		this.id = -1;
-		this.dataInicio = LocalDate.parse("01/01/0001", DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-		this.dataFim = LocalDate.parse("01/01/0001", DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-		this.seguradora = new Seguradora();
-		this.listaSinistros = new ArrayList<Sinistro>();
-		this.listaCondutores = new ArrayList<Condutor>();
-		this.valorMensal = -1;
+	public Seguro() { 
+		this.id = gerarID();
 	}
-	
-//	public Seguro() { 
-//		this.id = gerarID();
-//	}
 	
 	public int getID() {
 		return id;
@@ -117,6 +107,7 @@ public abstract class Seguro {
 		for (Condutor c : getListaCondutores())
 			if (c.getCPF().equals(condutor.getCPF()))
 				return true;
+		// Adicionar à lista:
 		return getListaCondutores().add(condutor);
 	}
 	
@@ -132,6 +123,13 @@ public abstract class Seguro {
 		return null;
 	}
 	
+	public void visualizarSinistros(Condutor condutor){
+    	// Imprime uma todos os sinistros associados ao condutor.
+    	for (Sinistro sinistro : getListaSinistros())
+    		if (sinistro.getCondutor().equals(condutor))
+    			System.out.println(sinistro);				
+    }
+	
 	public String listarSinistros() {
 		String listaSinistrosString = "";
 		
@@ -143,6 +141,6 @@ public abstract class Seguro {
 	}
 	
 	public String toString() {
-		return ("ID " + getID() + " " + getDataInicio() + " a " + getDataFim() + " - Seguradora " + getSeguradora().getNome() + " - Valor mensal " + getValorMensal());
+		return ("Seguro ID " + getID() + " " + getDataInicio() + " a " + getDataFim() + " - Seguradora " + getSeguradora().getNome() + " - Valor mensal " + getValorMensal());
 	}
 }

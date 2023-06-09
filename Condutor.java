@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Condutor {
 	private String cpf;
@@ -11,7 +12,7 @@ public class Condutor {
 	private ArrayList<Sinistro> listaSinistros;
 	
 	public Condutor(String cpf, String nome, String telefone, String endereco, String email, LocalDate dataNascimento, ArrayList<Sinistro> listaSinistros) {
-		this.cpf = cpf;
+		this.cpf = cpf.replaceAll("[^0-9]", "");;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.endereco = endereco;
@@ -21,7 +22,7 @@ public class Condutor {
 	}
 	
 	public Condutor(String cpf, String nome, String telefone, String endereco, String email, LocalDate dataNascimento) {
-		this.cpf = cpf;
+		this.cpf = cpf.replaceAll("[^0-9]", "");;
 		this.nome = nome;
 		this.telefone = telefone;
 		this.endereco = endereco;
@@ -31,7 +32,8 @@ public class Condutor {
 	}
 	
 	public Condutor() {
-		this.cpf = this.nome = this.telefone = this.endereco = this.email = this.dataNascimento = "";
+		this.cpf = this.nome = this.telefone = this.endereco = this.email = "";
+		this.dataNascimento = LocalDate.parse("01/01/0001", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.listaSinistros = new ArrayList<Sinistro>();
 	}
 	
@@ -75,11 +77,11 @@ public class Condutor {
 		this.email = email;
 	}
 
-	public String getDataNascimento() {
+	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(String dataNascimento) {
+	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 

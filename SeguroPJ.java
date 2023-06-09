@@ -10,7 +10,7 @@ public class SeguroPJ extends Seguro {
 		super(dataInicio, dataFim, seguradora, listaSinistros, listaCondutores);
 		this.frota = frota;
 		this.cliente = cliente;
-		this.setValorMensal(calcularValor());
+		this.setValorMensal(calcularValor(cliente));
 	}
 	
 	public Frota getFrota() {
@@ -29,7 +29,7 @@ public class SeguroPJ extends Seguro {
 		this.cliente = cliente;
 	}
 	
-	public int calcularValor() {
+	public int calcularValor(ClientePJ cliente) {
 		int qtdeFuncionarios = cliente.getQtdeFuncionarios();
 		int anosPosFundacao = cliente.idade();
 		int quantidadeVeiculos = 0;
